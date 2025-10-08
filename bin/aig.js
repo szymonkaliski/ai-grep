@@ -25,8 +25,8 @@ Examples:
     }
 
     if (!args.query) {
-      console.error('Error: search query cannot be empty');
-      process.exit(1);
+      console.error('Error: Search query cannot be empty');
+      process.exit(2);
     }
 
     const apiKey = await getApiKey();
@@ -42,7 +42,7 @@ Examples:
     process.exit(0);
   } catch (error) {
     console.error(`Error: ${error.message}`);
-    process.exit(1);
+    process.exit(2);
   }
 }
 
