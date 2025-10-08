@@ -1,4 +1,4 @@
-# `aig`
+# `ai-grep`
 
 AI-powered fuzzy grep using Claude Agent SDK
 
