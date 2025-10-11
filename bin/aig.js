@@ -5,6 +5,10 @@ import { getApiKey } from '../lib/api-key.js';
 import { executeQuery } from '../lib/query.js';
 import { formatOutput } from '../lib/formatter.js';
 
+if (!process.env.ANTHROPIC_API_KEY) {
+  process.env.ANTHROPIC_API_KEY = await getApiKey();
+}
+
 async function main() {
   try {
     const args = parseArgs(process.argv.slice(2));
@@ -29,8 +33,7 @@ Examples:
       process.exit(2);
     }
 
-    const apiKey = await getApiKey();
-    const results = await executeQuery(args.query, apiKey);
+    const results = await executeQuery(args.query);
     const output = await formatOutput(results, args);
 
     if (!output) {
