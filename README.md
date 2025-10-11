@@ -34,7 +34,31 @@ aig --json 'database queries'
 
 ### Options
 
-- `--files` - Output only filenames with line numbers (vim-style: file.txt:42)
-- `--json` - Output results as JSON
-- `--help` - Show help message
+- `--files`, `-f` - Output only filenames with line numbers (vim-style: file.txt:42)
+- `--json`, `-j` - Output results as JSON
+- `--version`, `-v` - Show version number
+- `--help`, `-h` - Show help message
 
+## Development
+
+This project is written in TypeScript.
+
+### Setup
+
+```bash
+npm install
+```
+
+### Building
+
+```bash
+npm run build        # Compile TypeScript to dist/
+npm run typecheck    # Run type checking without building
+```
+
+### Testing locally
+
+```bash
+npm run build
+node dist/bin/aig.js 'your search query'
+```

@@ -1,26 +1,45 @@
 #!/usr/bin/env node
 
+import { readFile } from 'fs/promises';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { parseArgs } from '../lib/args.js';
 import { getApiKey } from '../lib/api-key.js';
 import { executeQuery } from '../lib/query.js';
 import { formatOutput } from '../lib/formatter.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 if (!process.env.ANTHROPIC_API_KEY) {
   process.env.ANTHROPIC_API_KEY = await getApiKey();
 }
 
-async function main() {
+async function getVersion(): Promise<string> {
+  const packageJsonPath = join(__dirname, '../../package.json');
+  const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf-8'));
+  return packageJson.version;
+}
+
+async function main(): Promise<void> {
   try {
     const args = parseArgs(process.argv.slice(2));
+
+    if (args.version) {
+      const version = await getVersion();
+      console.log(version);
+      process.exit(0);
+    }
 
     if (args.help) {
       console.log(`Usage: aig [--files] [--json] <search_query>
 AI-powered fuzzy grep using Claude
 
 Options:
-  --files    Output only filenames with line numbers (vim-style: file.txt:42)
-  --json     Output results as JSON
-  --help     Show this help message
+  --files, -f       Output only filenames with line numbers (vim-style: file.txt:42)
+  --json, -j        Output results as JSON
+  --version, -v     Show version number
+  --help, -h        Show this help message
 
 Examples:
   aig 'authentication logic'
@@ -44,7 +63,8 @@ Examples:
     console.log(output);
     process.exit(0);
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`Error: ${errorMessage}`);
     process.exit(2);
   }
 }

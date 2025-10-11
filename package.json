@@ -1,17 +1,19 @@
 {
   "name": "ai-grep",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "AI-powered fuzzy grep using Claude",
   "type": "module",
   "bin": {
-    "aig": "./bin/aig.js"
+    "aig": "./dist/bin/aig.js"
   },
   "files": [
-    "bin",
-    "lib"
+    "dist"
   ],
   "scripts": {
-    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -27,7 +29,9 @@
     "@anthropic-ai/claude-agent-sdk": "^0.1.0"
   },
   "devDependencies": {
-    "prettier": "^3.4.2"
+    "@types/node": "^24.7.2",
+    "prettier": "^3.4.2",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -1,5 +1,10 @@
-export function createSpinner() {
-  let interval = null;
+export interface Spinner {
+  start(): void;
+  stop(): void;
+}
+
+export function createSpinner(): Spinner {
+  let interval: NodeJS.Timeout | null = null;
   let isRunning = false;
 
   const dots = ['', '.', '..', '...'];

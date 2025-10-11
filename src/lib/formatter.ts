@@ -1,6 +1,10 @@
 import { readFile } from 'fs/promises';
+import { ParsedArgs } from './args.js';
 
-export async function formatOutput(results, args) {
+export async function formatOutput(
+  results: string[],
+  args: ParsedArgs
+): Promise<string | null> {
   if (results.length === 0) {
     return null;
   }
@@ -23,12 +27,12 @@ export async function formatOutput(results, args) {
   return await formatRipgrepStyle(results);
 }
 
-async function formatRipgrepStyle(results) {
+async function formatRipgrepStyle(results: string[]): Promise<string> {
   const cyan = '\x1b[36m';
   const green = '\x1b[32m';
   const reset = '\x1b[0m';
 
-  const fileCache = new Map();
+  const fileCache = new Map<string, string[] | null>();
   const uniqueFiles = [...new Set(results.map((line) => line.split(':')[0]))];
 
   await Promise.all(
@@ -42,7 +46,7 @@ async function formatRipgrepStyle(results) {
     })
   );
 
-  const output = [];
+  const output: string[] = [];
   let currentFile = '';
 
   for (const line of results) {

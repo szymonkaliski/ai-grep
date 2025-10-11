@@ -1,11 +1,15 @@
-import { query } from '@anthropic-ai/claude-agent-sdk';
+import {
+  query,
+  type Options,
+  type PermissionMode,
+} from '@anthropic-ai/claude-agent-sdk';
 import { createSpinner } from './spinner.js';
 
 const QUERY_TIMEOUT_MS = 60000;
 
 const SEARCH_PROMPT = (
-  searchQuery
-) => `You are a search engine. Find files and code that match the user's search query.
+  searchQuery: string
+): string => `You are a search engine. Find files and code that match the user's search query.
 
 IMPORTANT INSTRUCTIONS:
 1. Search FUZZILY - look for:
@@ -34,10 +38,10 @@ IMPORTANT INSTRUCTIONS:
 
 USER SEARCH QUERY: "${searchQuery}"`;
 
-function withTimeout(promise, timeoutMs) {
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
   return Promise.race([
     promise,
-    new Promise((_, reject) =>
+    new Promise<T>((_, reject) =>
       setTimeout(
         () => reject(new Error(`Query timed out after ${timeoutMs / 1000}s`)),
         timeoutMs
@@ -46,16 +50,16 @@ function withTimeout(promise, timeoutMs) {
   ]);
 }
 
-export async function executeQuery(searchQuery) {
+export async function executeQuery(searchQuery: string): Promise<string[]> {
   const spinner = createSpinner();
-  const results = [];
+  const results: string[] = [];
 
   try {
     spinner.start();
 
-    const options = {
+    const options: Options = {
       disallowedTools: ['Edit', 'Write', 'NotebookEdit', 'TodoWrite', 'Task'],
-      permissionMode: 'bypassPermissions',
+      permissionMode: 'bypassPermissions' as PermissionMode,
       systemPrompt: {
         type: 'preset',
         preset: 'claude_code',
@@ -90,9 +94,10 @@ export async function executeQuery(searchQuery) {
     return lines;
   } catch (error) {
     spinner.stop();
-    if (error.message.includes('timed out')) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('timed out')) {
       throw new Error(`Search timed out. Try a more specific query.`);
     }
-    throw new Error(`Search failed: ${error.message}`);
+    throw new Error(`Search failed: ${errorMessage}`);
   }
 }
