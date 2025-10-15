@@ -89,7 +89,17 @@ export async function executeQuery(searchQuery: string): Promise<string[]> {
     const lines = output
       .split('\n')
       .map((line) => line.trim())
-      .filter((line) => /^[^:]+:\d+$/.test(line));
+      .filter((line) => /^[^:]+:\d+$/.test(line))
+      .sort((a, b) => {
+        const [fileA, lineNumA] = a.split(':');
+        const [fileB, lineNumB] = b.split(':');
+
+        if (fileA !== fileB) {
+          return fileA.localeCompare(fileB);
+        }
+
+        return parseInt(lineNumA, 10) - parseInt(lineNumB, 10);
+      });
 
     return lines;
   } catch (error) {
