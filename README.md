@@ -1,6 +1,7 @@
 # `ai-grep`
 
-AI-powered fuzzy grep using Claude Agent SDK
+When you're looking for something, but you're not exactly sure what.
+AI fuzzy grep using Claude Agent SDK.
 
 ## Installation
 
@@ -34,31 +35,8 @@ aig --json 'database queries'
 
 ### Options
 
-- `--files`, `-f` - Output only filenames with line numbers (vim-style: file.txt:42)
+- `--files`, `-f` - Output only filenames with line numbers
 - `--json`, `-j` - Output results as JSON
 - `--version`, `-v` - Show version number
 - `--help`, `-h` - Show help message
 
-## Development
-
-This project is written in TypeScript.
-
-### Setup
-
-```bash
-npm install
-```
-
-### Building
-
-```bash
-npm run build        # Compile TypeScript to dist/
-npm run typecheck    # Run type checking without building
-```
-
-### Testing locally
-
-```bash
-npm run build
-node dist/bin/aig.js 'your search query'
-```

@@ -23,8 +23,16 @@
     "claude",
     "fuzzy"
   ],
-  "author": "",
+  "author": "Szymon Kaliski <hi@szymonkaliski.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szymonkaliski/ai-grep.git"
+  },
+  "bugs": {
+    "url": "https://github.com/szymonkaliski/ai-grep/issues"
+  },
+  "homepage": "https://github.com/szymonkaliski/ai-grep#readme",
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.1.0"
   },
